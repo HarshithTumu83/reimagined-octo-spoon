@@ -1,1 +1,148 @@
 
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Bus {
+private:
+    string busNo;
+    string driver;
+    string arrival;
+    string departure;
+    string from;
+    string to;
+    string seat[32];
+
+public:
+    void install();
+    void allotment();
+    void show();
+    void empty();
+    void position(int);
+};
+
+Bus bus[10];
+int countBus = 0;
+
+void Bus::install() {
+    cout << "\nEnter Bus No: ";
+    cin >> busNo;
+    cout << "Enter Driver Name: ";
+    cin >> driver;
+    cout << "Arrival Time: ";
+    cin >> arrival;
+    cout << "Departure Time: ";
+    cin >> departure;
+    cout << "From: ";
+    cin >> from;
+    cout << "To: ";
+    cin >> to;
+
+    empty();
+    cout << "\nBus Added Successfully!\n";
+}
+
+void Bus::empty() {
+    for(int i = 0; i < 32; i++) {
+        seat[i] = "Empty";
+    }
+}
+
+void Bus::allotment() {
+    int seatNo;
+    string name;
+
+    cout << "\nEnter Seat Number (1-32): ";
+    cin >> seatNo;
+
+    if(seatNo < 1 || seatNo > 32) {
+        cout << "Invalid Seat Number!\n";
+        return;
+    }
+
+    if(seat[seatNo - 1] == "Empty") {
+        cout << "Enter Passenger Name: ";
+        cin >> name;
+        seat[seatNo - 1] = name;
+        cout << "Seat Reserved Successfully!\n";
+    } else {
+        cout << "Seat Already Reserved!\n";
+    }
+}
+
+void Bus::show() {
+    cout << "\nBus No: " << busNo;
+    cout << "\nDriver: " << driver;
+    cout << "\nArrival: " << arrival;
+    cout << "\nDeparture: " << departure;
+    cout << "\nFrom: " << from;
+    cout << "\nTo: " << to << endl;
+}
+
+void Bus::position(int busIndex) {
+    cout << "\nSeat Status for Bus " << busIndex + 1 << "\n";
+
+    for(int i = 0; i < 32; i++) {
+        cout << "Seat " << i + 1 << ": " << seat[i] << endl;
+    }
+}
+
+int main() {
+    int choice, busIndex;
+
+    while(true) {
+        cout << "\n===== BUS MANAGEMENT SYSTEM =====";
+        cout << "\n1. Add Bus";
+        cout << "\n2. Reserve Seat";
+        cout << "\n3. Show Bus Details";
+        cout << "\n4. Show Seat Status";
+        cout << "\n5. Exit";
+        cout << "\nEnter Choice: ";
+        cin >> choice;
+
+        switch(choice) {
+            case 1:
+                if(countBus < 10) {
+                    bus[countBus].install();
+                    countBus++;
+                } else {
+                    cout << "Bus Limit Reached!\n";
+                }
+                break;
+
+            case 2:
+                cout << "Enter Bus Number Index (1-" << countBus << "): ";
+                cin >> busIndex;
+                if(busIndex >= 1 && busIndex <= countBus)
+                    bus[busIndex - 1].allotment();
+                else
+                    cout << "Invalid Bus Index!\n";
+                break;
+
+            case 3:
+                for(int i = 0; i < countBus; i++) {
+                    cout << "\n--- Bus " << i + 1 << " ---";
+                    bus[i].show();
+                }
+                break;
+
+            case 4:
+                cout << "Enter Bus Number Index (1-" << countBus << "): ";
+                cin >> busIndex;
+                if(busIndex >= 1 && busIndex <= countBus)
+                    bus[busIndex - 1].position(busIndex - 1);
+                else
+                    cout << "Invalid Bus Index!\n";
+                break;
+
+            case 5:
+                cout << "Exiting Program...\n";
+                return 0;
+
+            default:
+                cout << "Invalid Choice!\n";
+        }
+    }
+
+    return 0;
+}
